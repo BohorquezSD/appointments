@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
+import Error from './Error'
 
-function Form({patients, setPatients}) {
+function Form({patients, setPatients, patient, setPatient}) {
     const [name, setName] = useState("")
     const [person, setPerson] = useState("")
     const [email, setEmail] = useState("")
@@ -8,6 +9,22 @@ function Form({patients, setPatients}) {
     const [syntoms, setSyntoms] = useState("")
 
     const [errors, setErrors] = useState(false)
+
+    useEffect(() => {
+        if( Object.keys(patient).length > 0 ) {
+            setName(patient.name)
+            setPerson(patient.person)
+            setEmail(patient.email)
+            setDate(patient.date)
+            setSyntoms(patient.syntoms)
+        }
+    },[patient])
+
+    const generateId = () => {
+        const random = Math.random().toString(36).substring(2)
+        const date = Date.now().toString(36)
+        return random + date
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -17,13 +34,24 @@ function Form({patients, setPatients}) {
             return;
         }
         setErrors(false);
-        const newPatient = {name,
+        const objectPatient = {
+            name,
             person,
             email,
             date,
             syntoms
         }
-        setPatients([...patients, newPatient])
+
+        if (patient.id){
+            objectPatient.id = patient.id
+            const updatedPatients = patients.map((patientState) => patientState.id === patient.id ? objectPatient : patientState)
+            setPatients(updatedPatients)
+            setPatient({})
+        }else{
+            objectPatient.id = generateId()
+            setPatients([...patients, objectPatient])
+        }
+        
         setName("")
         setPerson("")
         setEmail("")
@@ -44,11 +72,7 @@ function Form({patients, setPatients}) {
         </p>
         <form className='bg-white shadow-md rounded-lg py-10 px-5 mb-5' 
             onSubmit={handleSubmit}>
-                { errors && 
-                    <div className='bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3' role='alert'>
-                        <strong className='font-bold'>Por favor llene todos los campos</strong>
-                    </div>
-                }
+                { errors && <Error><p>Todos los campos son obligatorios</p></Error>}
             <div className='mb-5'>
                 <label htmlFor='pet' className='block text-gray-700 uppercase font-bold'>
                      Nombre de la mascota
@@ -117,7 +141,7 @@ function Form({patients, setPatients}) {
             <input 
                 type="submit"
                 className='bg-indigo-600 w-full p-3 text-cyan-50 uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all'
-                value="Agregar paciente"/>
+                value={patient.id ? "Editar paciente": "Agregar paciente"}/>
         </form>
     </div>
   )

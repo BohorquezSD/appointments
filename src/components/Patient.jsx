@@ -1,37 +1,59 @@
 
-function Patient() {
+function Patient({patient, setPatient, deletePatient}) {
+    const {name, person, email, date, syntoms, id} = patient;
+    const handleDelete = () => {
+        const response = confirm('Quieres eliminar este paciente')
+        if (response) {
+            deletePatient(id)
+        }
+    }
   return (
+
     <div className='bg-white shadow-md rounded-lg py-10 px-5 m-3'>
             <p className='font-bold mb-3 text-gray-700 uppercase'>
                 Nombre: {''}
                 <span className='font-normal normal-case'>
-                    Pepito
+                    {name}
                 </span>
             </p>
             <p className='font-bold mb-3 text-gray-700 uppercase'>
                 Propietario: {''}
                 <span className='font-normal normal-case'>
-                    Sebastián
+                    {person}
                 </span>
             </p>
             <p className='font-bold mb-3 text-gray-700 uppercase'>
                 Email: {''}
                 <span className='font-normal normal-case'>
-                    sb@gmail.com
+                    {email}
                 </span>
             </p>
             <p className='font-bold mb-3 text-gray-700 uppercase'>
                 Fecha alta: {''}
                 <span className='font-normal normal-case'>
-                    10 de diciembre
+                    {date}
                 </span>
             </p>
             <p className='font-bold mb-3 text-gray-700 uppercase'>
                 Sintomas: {''}
                 <span className='font-normal normal-case'>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consectetur aut expedita fuga consequuntur illo amet quo sunt, quisquam temporibus unde ipsum molestias ipsam illum! Facere ipsum beatae vero veritatis laudantium.
+                    {syntoms}
                 </span>
             </p>
+            <div className="flex justify-between mt-10">
+                <button className='py-2 px-10 bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase rounded-lg'
+                    type="button"
+                    onClick={() => setPatient(patient)}
+                >
+                    Editar
+                </button>
+                <button className='py-2 px-10 bg-red-600 hover:bg-red-700 text-white font-bold uppercase rounded-lg'
+                    type="button"
+                    onClick={handleDelete}
+                >
+                    Eliminar
+                </button>
+            </div>
         </div>
   )
 }
