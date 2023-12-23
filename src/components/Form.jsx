@@ -1,7 +1,37 @@
-import React from 'react'
+import {useState, useEffect} from 'react'
 
-function Form() {
-  return (
+function Form({patients, setPatients}) {
+    const [name, setName] = useState("")
+    const [person, setPerson] = useState("")
+    const [email, setEmail] = useState("")
+    const [date, setDate] = useState("")
+    const [syntoms, setSyntoms] = useState("")
+
+    const [errors, setErrors] = useState(false)
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if ([name, person, email, date, syntoms].includes("")){
+            console.log("Please enter")
+            setErrors(true);
+            return;
+        }
+        setErrors(false);
+        const newPatient = {name,
+            person,
+            email,
+            date,
+            syntoms
+        }
+        setPatients([...patients, newPatient])
+        setName("")
+        setPerson("")
+        setEmail("")
+        setDate("")
+        setSyntoms("")
+    }
+
+    return (
     <div className='md:w-1/2 lg:w-2/5'>
         <h2 className='font-black text-3xl text-center'>
             Seguimiento de pacientes
@@ -12,7 +42,13 @@ function Form() {
                 administralos
             </span>{" "}
         </p>
-        <form className='bg-white shadow-md rounded-lg py-10 px-5 mb-5' >
+        <form className='bg-white shadow-md rounded-lg py-10 px-5 mb-5' 
+            onSubmit={handleSubmit}>
+                { errors && 
+                    <div className='bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3' role='alert'>
+                        <strong className='font-bold'>Por favor llene todos los campos</strong>
+                    </div>
+                }
             <div className='mb-5'>
                 <label htmlFor='pet' className='block text-gray-700 uppercase font-bold'>
                      Nombre de la mascota
@@ -21,7 +57,11 @@ function Form() {
                     id='pet'
                     type="text"
                     placeholder='Nombre de la mascota'
-                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'/>
+                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                    value={name}
+                    onChange={(e) => {setName(e.target.value)}}
+                    />
+                    
             </div>
             <div className='mb-5'>
                 <label htmlFor='person' className='block text-gray-700 uppercase font-bold'>
@@ -31,7 +71,11 @@ function Form() {
                     id='person'
                     type="text"
                     placeholder='Nombre del propietario'
-                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'/>
+                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                    value={person}
+                    onChange={(e) => {setPerson(e.target.value)}}
+                />
+                    
             </div>
             <div className='mb-5'>
                 <label htmlFor='email' className='block text-gray-700 uppercase font-bold'>
@@ -41,7 +85,10 @@ function Form() {
                     id='email'
                     type="text"
                     placeholder='Email'
-                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'/>
+                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                    value={email}
+                    onChange={(e) => {setEmail(e.target.value)}}
+                />
             </div>
             <div className='mb-5'>
                 <label htmlFor='date' className='block text-gray-700 uppercase font-bold'>
@@ -50,16 +97,22 @@ function Form() {
                 <input
                     id='date'
                     type="date"
-                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'/>
+                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                    value={date}
+                    onChange={(e) => {setDate(e.target.value)}}
+                />
             </div>
             <div className='mb-5'>
-                <label htmlFor='person' className='block text-gray-700 uppercase font-bold'>
+                <label htmlFor='syntoms' className='block text-gray-700 uppercase font-bold'>
                      Síntomas
                 </label>
                 < textarea
-                    id='person'
+                    id='syntoms'
                     placeholder="sintomas"
-                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'/>
+                    className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
+                    value={syntoms}
+                    onChange={(e) => {setSyntoms(e.target.value)}}
+                />
             </div>
             <input 
                 type="submit"
